@@ -38,8 +38,8 @@ def populate(filename, table_name):
     db.close()  #close database
 
 
-populate("peeps.csv", "Peepz")
-populate("courses.csv", "coursez")
+#populate("peeps.csv", "Peepz")
+#populate("courses.csv", "coursez")
 
 f="discobandit.db"
 db = sqlite3.connect(f) #open if f exists, otherwise create
