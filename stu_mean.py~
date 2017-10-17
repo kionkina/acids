@@ -17,29 +17,7 @@ import sqlite3   #enable control of an sqlite database
 #print foo #list of tuples containing course data
 #---------------------------------------HW 10 CODE ------------------------------------------------
 
-def find_grades(input):
-     '''
-     Look up each students grades
-     Printss a list of tuples with grades
-     '''
-     f="discobandit.db"
-     db = sqlite3.connect(f) #open if f exists, otherwise create                                   
-     c = db.cursor()    #facilitate db ops             
-     input = str(input)
-     print input
-     q = "SELECT code, mark FROM Peepz, coursez WHERE coursez.id = " + "'" + input + "'" + " or " + "Peepz.name = " + "'" + input + "'" 
-     foo = c.execute(q)
-     print foo
-      print foo.fetchall()
-      db.close()
-     
- 
- find_grades(1)
- find_grades('digweed')
-
-
-
-def compute_avgs():
+def find_grades():
     '''
     Look up each students grades
     Printss a list of tuples with grades
