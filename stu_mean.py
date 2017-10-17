@@ -25,19 +25,29 @@ def find_grades(input):
      f="acids.db"
      db = sqlite3.connect(f) #open if f exists, otherwise create                                   
      c = db.cursor()    #facilitate db ops             
-     input = str(input)
+
      print(input)
-     q = "SELECT code, mark FROM courses WHERE courses.id = " + "'" + input + "'" 
+     if type(input) is int:
+          input = str(input)
+          q = "SELECT code, mark FROM courses WHERE courses.id = " + "'" + input + "'" 
+
+     else: 
+          input = str(input)
+          the_id = c.execute("SELECT id FROM peeps WHERE peeps.name = " + "'" + input + "'")
+#          print "THE_ID IS"
+          the_id = the_id.fetchall()[0][0] #stores id
+          q = "SELECT code, mark FROM courses WHERE courses.id = " + "'" + the_id + "'" 
+
      foo = c.execute(q)
-     #print(foo)
-     #print(foo.fetchall())
+     print(foo.fetchall())
      for x in foo:
           print(x)
      db.close()
      
  
 find_grades(1)
-
+find_grades(4)
+find_grades('digweed')
 
 
 def select_all_students():
