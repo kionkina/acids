@@ -22,20 +22,21 @@ def find_grades(input):
      Look up each students grades
      Printss a list of tuples with grades
      '''
-     f="discobandit.db"
+     f="acids.db"
      db = sqlite3.connect(f) #open if f exists, otherwise create                                   
      c = db.cursor()    #facilitate db ops             
      input = str(input)
-     print input
-     q = "SELECT code, mark FROM Peepz, coursez WHERE coursez.id = " + "'" + input + "'" + " or " + "Peepz.name = " + "'" + input + "'" 
+     print(input)
+     q = "SELECT code, mark FROM courses WHERE courses.id = " + "'" + input + "'" 
      foo = c.execute(q)
-     print foo
-      print foo.fetchall()
-      db.close()
+     #print(foo)
+     #print(foo.fetchall())
+     for x in foo:
+          print(x)
+     db.close()
      
  
- find_grades(1)
- find_grades('digweed')
+find_grades(1)
 
 
 
@@ -70,4 +71,4 @@ def compute_avgs():
     db.close()
     
 
-find_grades()
+compute_avgs()
