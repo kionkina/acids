@@ -23,19 +23,19 @@ def find_grades(input):
      Printss a list of tuples with grades
      '''
      f="acids.db"
-     db = sqlite3.connect(f) #open if f exists, otherwise create                                   
-     c = db.cursor()    #facilitate db ops             
+     db = sqlite3.connect(f) #open if f exists, otherwise create
+     c = db.cursor()    #facilitate db ops
      input = str(input)
      print(input)
-     q = "SELECT code, mark FROM courses WHERE courses.id = " + "'" + input + "'" 
+     q = "SELECT code, mark FROM courses WHERE courses.id = " + "'" + input + "'"
      foo = c.execute(q)
      #print(foo)
      #print(foo.fetchall())
      for x in foo:
           print(x)
      db.close()
-     
- 
+
+
 find_grades(1)
 
 
@@ -47,9 +47,9 @@ def compute_avgs():
     '''
     f="acids.db"
     db = sqlite3.connect(f) #open if f exists, otherwise create
-    c1 = db.cursor()    #facilitate db ops             
+    c1 = db.cursor()    #facilitate db ops
     c2 = db.cursor()
-    
+
     q = "SELECT id, name FROM peeps"
     foo = c1.execute(q)
 
@@ -63,12 +63,57 @@ def compute_avgs():
         for grade in marks:
             i+=1
             total+=int(grade[0])
-        avgDict[bar[1]]=int(total*10/i)/10.0 
+        avgDict[bar[1]]=int(total*10/i)/10.0
 
     print(avgDict)
     #print(foo)
     #print foo.fetchall()
     db.close()
-    
+
 
 compute_avgs()
+
+def add_to_courses(code, mark, id): #Important takeaway: always use db.commit()
+	f = "acids.db"
+	db = sqlite3.connect(f)
+	c = db.cursor()
+	cmd = "INSERT INTO courses (code, mark, id) VALUES (\'" + str(code) + "\', " + str(mark) + ", " + str(id) + ");"
+	c.execute(cmd)
+	db.commit() #apparently you need this
+	db.close()
+
+def add_rows_to_courses(list_of_people):
+	#Use this format for list_of_people:
+	#abunchofcourses = [("forensics", 27, 1), ("gov", 28, 2)]
+	f="acids.db"
+	db = sqlite3.connect(f)
+	c = db.cursor()
+	cmd = "INSERT INTO courses VALUES (?, ?, ?)"
+	c.executemany(cmd, list_of_people)
+	db.commit()
+	db.close()
+
+def delete_row(row_name):
+	#I added this one so no one can see my testing
+	try:
+		f="acids.db"
+		db = sqlite3.connect(f)
+		c = db.cursor()
+		cmd = "DELETE FROM courses WHERE code=\'"+row_name + "\'"
+		c.execute(cmd)
+		db.commit()
+		db.close()
+	except:
+		print "sqlite3 got mad at you? maybe fix your request"
+
+def display_table(table):
+	f = "acids.db"
+	db = sqlite3.connect(f)
+	c = db.cursor()
+	cmd = "SELECT * FROM " + table;
+	ret = c.execute(cmd);
+	for thing in ret:
+		print thing;
+	db.close()
+
+display_table("courses")
