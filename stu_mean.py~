@@ -17,7 +17,30 @@ import sqlite3   #enable control of an sqlite database
 #print foo #list of tuples containing course data
 #---------------------------------------HW 10 CODE ------------------------------------------------
 
-def find_grades():
+def find_grades(input):
+     '''
+     Look up each students grades
+     Printss a list of tuples with grades
+     '''
+     f="acids.db"
+     db = sqlite3.connect(f) #open if f exists, otherwise create                                   
+     c = db.cursor()    #facilitate db ops             
+     input = str(input)
+     print(input)
+     q = "SELECT code, mark FROM courses WHERE courses.id = " + "'" + input + "'" 
+     foo = c.execute(q)
+     #print(foo)
+     #print(foo.fetchall())
+     for x in foo:
+          print(x)
+     db.close()
+     
+ 
+find_grades(1)
+
+
+
+def compute_avgs():
     '''
     Look up each students grades
     Printss a list of tuples with grades
@@ -48,4 +71,4 @@ def find_grades():
     db.close()
     
 
-find_grades()
+compute_avgs()
