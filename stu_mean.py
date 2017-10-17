@@ -40,35 +40,45 @@ find_grades(1)
 
 
 
-def compute_avgs():
-    '''
-    Look up each students grades
-    Printss a list of tuples with grades
-    '''
-    f="acids.db"
-    db = sqlite3.connect(f) #open if f exists, otherwise create
-    c1 = db.cursor()    #facilitate db ops             
-    c2 = db.cursor()
+def select_all_students():
+     '''
+     Look up each students grades
+     Printss a list of tuples with grades
+     '''
+     f="acids.db"
+     db = sqlite3.connect(f) #open if f exists, otherwise create
+     c = db.cursor()    #facilitate db ops             
+     
     
-    q = "SELECT id, name FROM peeps"
-    foo = c1.execute(q)
+     q = "SELECT id, name FROM peeps"
+     foo = c.execute(q)
+     students=[]
+     for bar in foo:
+          students+=[bar]
+     db.close()
+     return students
 
-    avgDict={}
-    for bar in foo:
-        #print(bar)
-        p = "SELECT mark FROM courses WHERE id = '"+ bar[0]+"'"
-        marks=c2.execute(p)
-        i=0
-        total=0
-        for grade in marks:
-            i+=1
-            total+=int(grade[0])
-        avgDict[bar[1]]=int(total*10/i)/10.0 
 
-    print(avgDict)
-    #print(foo)
-    #print foo.fetchall()
-    db.close()
+def compute_avgs(students):
+     f="acids.db"
+     db = sqlite3.connect(f) #open if f exists, otherwise create
+     c = db.cursor()
+     
+     avgDict={}
+     for student in students:
+          p = "SELECT mark FROM courses WHERE id = '"+ student[0]+"'"
+          marks=c.execute(p)
+          i=0
+          total=0
+          for grade in marks:
+             i+=1
+             total+=int(grade[0])
+             avgDict[student[1]]=int(total*10/i)/10.0 
+             
+     print(avgDict)
+     #print(foo)
+     #print foo.fetchall()
+     db.close()
     
 
-compute_avgs()
+compute_avgs(select_all_students())
