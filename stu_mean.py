@@ -80,5 +80,4 @@ def compute_avgs(students):
      #print foo.fetchall()
      db.close()
     
-
 compute_avgs(select_all_students())
