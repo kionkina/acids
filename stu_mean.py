@@ -46,7 +46,7 @@ def find_grades(person):
      db.close()
      #print(grades)
      return grades
- 
+
 #find_grades(1)
 #find_grades(4)
 #find_grades('digweed')
@@ -121,7 +121,7 @@ def select_all_students():
 #takes list of all students and calculates their averages with find_grades()
 #returns dict in form{name:[id,average]}
 def compute_avgs():
-     
+
      students=select_all_students()#takes list of all students
      avg_dict={}#creates dictionary of student averages
 
@@ -133,27 +133,33 @@ def compute_avgs():
              i+=1
              total+=int(grade[1])
              avg_dict[student[1]]=[int(student[0]),int(total*10/i)/10.0]
-             
+
      #print(avg_dict)
      return avg_dict
      #print(foo)
      #print foo.fetchall()
-     
+
 #takes dictoionary of {students:avgs} and creates table in db
 def tablify():
      avgs=compute_avgs()
 
      f="acids.db"
      db = sqlite3.connect(f) #open if f exists, otherwise create
-     c = db.cursor()    #facilitate db ops             
+     c = db.cursor()    #facilitate db ops
 
-     create="CREATE TABLE averages (id INTEGER, average REAL)"
+     drop = "DROP TABLE peeps_avg"
+     try:
+		 c.execute(drop)
+     except:
+		'the fact that life is meaningless'
+
+     create="CREATE TABLE peeps_avg (id INTEGER, average REAL)"
      c.execute(create)
 
      for student in avgs:
-          add="INSERT INTO averages VALUES ('"+str(avgs[student][0])+"', '"+str(avgs[student][1])+"')"
+          add="INSERT INTO peeps_avg VALUES ('"+str(avgs[student][0])+"', '"+str(avgs[student][1])+"')"
           c.execute(add)
-     c.execute("SELECT * FROM averages")
+     c.execute("SELECT * FROM peeps_avg")
      rows=c.fetchall()
      '''
      for row in rows:
@@ -161,3 +167,23 @@ def tablify():
      '''
      db.commit()
      db.close()
+
+def update_average(student, new_avg):
+	f = "acids.db"
+	db = sqlite3.connect(f)
+	c = db.cursor()
+	avgs = compute_avgs()
+	cmd = 'this is a placeholder so i decide what goes here'
+	if type(student) is int:
+		cmd = "UPDATE peeps_avg SET average=" + str(new_avg) + " WHERE peeps_avg.id=\'" + str(student) + "\'"
+	else:
+		cmd = "UPDATE peeps_avg SET average=" + str(new_avg) + " WHERE peeps_avg.id=\'" + str(avgs[student][0]) + "\'"
+	print cmd;
+	c.execute(cmd)
+	db.commit()
+	db.close()
+	#print avgs[student]
+
+#update_average(4, 60)
+#display_table('peeps_avg')
+#update_average('digweed')
